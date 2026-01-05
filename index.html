@@ -3,9 +3,89 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Jay Sadhu | Visual Experiences</title>
 
-    <link rel="icon" href="./assets/favicon.ico" />
+    <!-- Primary Meta Tags -->
+    <title>DesignPerson - Creative Graphic Design Studio</title>
+    <meta
+      name="title"
+      content="DesignPerson - Creative Graphic Design Studio"
+    />
+    <meta
+      name="description"
+      content="DesignPerson is a creative graphic design studio offering logo design, branding, social media creatives, posters, and digital design solutions to elevate your brand identity."
+    />
+    <meta
+      name="keywords"
+      content="Graphic Design, Logo Design, Branding, Social Media Design, Creative Studio, DesignPerson, Jay Sadhu"
+    />
+    <meta name="author" content="Jay Sadhu" />
+    <meta name="robots" content="index, follow" />
+
+    <!-- Canonical -->
+    <link rel="canonical" href="https://designperson.netlify.app/" />
+
+    <!-- Favicon -->
+    <link rel="icon" href="./assets/favicon.png" />
+    <link rel="shortcut icon" href="./assets/favicon.png" />
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website" />
+    <meta
+      property="og:title"
+      content="DesignPerson - Creative Graphic Design Studio"
+    />
+    <meta
+      property="og:description"
+      content="Professional graphic design services including branding, logos, and social media creatives. Designed to make your brand stand out."
+    />
+    <meta
+      property="og:image"
+      content="https://designperson.netlify.app/assets/cover.jpg"
+    />
+    <meta property="og:url" content="https://designperson.netlify.app/" />
+    <meta property="og:site_name" content="DesignPerson" />
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta
+      name="twitter:title"
+      content="DesignPerson - Creative Graphic Design Studio"
+    />
+    <meta
+      name="twitter:description"
+      content="Creative graphic design services for modern brands. Logos, branding, and digital visuals that speak."
+    />
+    <meta
+      name="twitter:image"
+      content="https://designperson.netlify.app/assets/cover.jpg"
+    />
+
+    <!-- Web App Meta -->
+    <meta name="application-name" content="DesignPerson" />
+    <meta name="theme-color" content="#000000" />
+
+    <!-- Apple Meta -->
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-title" content="DesignPerson" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+    <link rel="apple-touch-icon" href="./assets/favicon.png" />
+
+    <!-- Schema.org -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "Organization",
+        "name": "DesignPerson",
+        "url": "https://designperson.netlify.app/",
+        "logo": "https://designperson.netlify.app/assets/favicon.png",
+        "image": "https://designperson.netlify.app/assets/cover.jpg",
+        "description": "A creative graphic design studio offering branding, logo design, and digital creatives.",
+        "founder": {
+          "@type": "Person",
+          "name": "Jay Sadhu"
+        }
+      }
+    </script>
 
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -210,6 +290,11 @@
         text-transform: uppercase;
         backdrop-filter: blur(10px);
         animation: fadeInDown 1s ease forwards;
+      }
+
+      .hero img {
+        width: 60vw;
+        max-width: 500px;
       }
 
       .hero h1 {
@@ -857,11 +942,8 @@
 
     <section class="hero">
       <div class="hero-badge">Available for projects</div>
-      <img
-        src="./assets/logo.png"
-        alt="Jay Sadhu Logo"
-        style="max-width: 90vw; margin-bottom: 20px"
-      />
+      <img src="./assets/logo.png" alt="Jay Sadhu Logo" />
+
       <h1>DESIGN PERSON</h1>
       <p style="font-weight: 800">
         Designing digital legacies for creators & brands.
@@ -1017,14 +1099,23 @@
 
       <div class="masonry-wrapper reveal">
         <div class="masonry-item hover-trigger">
+          <img src="./Work/christmas-post.png" loading="lazy" alt="Album Art" />
+
+          <div class="masonry-overlay">
+            <span class="work-tag">Poster</span>
+            <h3 class="work-title">Neon Nights</h3>
+          </div>
+        </div>
+
+        <div class="masonry-item hover-trigger">
           <img
             src="./Work/anniversary.jpg"
             loading="lazy"
             alt="Poster Design"
           />
           <div class="masonry-overlay">
-            <span class="work-tag">Poster</span>
-            <h3 class="work-title">Neon Nights</h3>
+            <span class="work-tag">YouTube Banner</span>
+            <h3 class="work-title">Tech Reviews</h3>
           </div>
         </div>
 
@@ -1034,14 +1125,7 @@
             loading="lazy"
             alt="Banner Design"
           />
-          <div class="masonry-overlay">
-            <span class="work-tag">YouTube Banner</span>
-            <h3 class="work-title">Tech Reviews</h3>
-          </div>
-        </div>
 
-        <div class="masonry-item hover-trigger">
-          <img src="./Work/christmas-post.png" loading="lazy" alt="Album Art" />
           <div class="masonry-overlay">
             <span class="work-tag">Album Art</span>
             <h3 class="work-title">Vibe Check</h3>
@@ -1049,7 +1133,7 @@
         </div>
 
         <div class="masonry-item hover-trigger">
-          <img src="./Work/diwali-post.jpg" loading="lazy" alt="Flyer" />
+          <img src="./Work/new-year-post.jpg" loading="lazy" alt="Thumbnail" />
           <div class="masonry-overlay">
             <span class="work-tag">Flyer</span>
             <h3 class="work-title">Event Launch</h3>
@@ -1065,7 +1149,7 @@
         </div>
 
         <div class="masonry-item hover-trigger">
-          <img src="./Work/new-year-post.jpg" loading="lazy" alt="Thumbnail" />
+          <img src="./Work/diwali-post.jpg" loading="lazy" alt="Flyer" />
           <div class="masonry-overlay">
             <span class="work-tag">Thumbnail</span>
             <h3 class="work-title">Viral Video</h3>
@@ -1073,7 +1157,8 @@
         </div>
 
         <div class="masonry-item hover-trigger">
-          <img src="./Work/new-year-post.png" loading="lazy" alt="Thumbnail" />
+          <img src="./Work/thumbnail2.jpg" loading="lazy" alt="Thumbnail" />
+
           <div class="masonry-overlay">
             <span class="work-tag">Thumbnail</span>
             <h3 class="work-title">Viral Video</h3>
@@ -1097,7 +1182,7 @@
         </div>
 
         <div class="masonry-item hover-trigger">
-          <img src="./Work/thumbnail2.jpg" loading="lazy" alt="Thumbnail" />
+          <img src="./Work/new-year-post.png" loading="lazy" alt="Thumbnail" />
           <div class="masonry-overlay">
             <span class="work-tag">Thumbnail</span>
             <h3 class="work-title">Viral Video</h3>
@@ -1183,7 +1268,7 @@
 
         <div class="social-row">
           <a
-            href="https://instagram.com/yourusername"
+            href="https://www.instagram.com/jay_sadhu__01"
             target="_blank"
             class="social-icon hover-trigger"
           >
