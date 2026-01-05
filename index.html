@@ -1003,10 +1003,22 @@
         <p>Posters, Thumbnails, Banners & More.</p>
       </div>
 
+      <!-- anniversary.jpg
+      christmas-post-2.png
+      christmas-post.png
+      diwali-post.jpg
+      logo.jpg
+
+      new-year-post.jpg
+      new-year-post.png
+      quot.jpg
+      thumbnail.jpg
+      thumbnail2.jpg -->
+
       <div class="masonry-wrapper reveal">
         <div class="masonry-item hover-trigger">
           <img
-            src="./Work/new-year-post.jpg"
+            src="./Work/anniversary.jpg"
             loading="lazy"
             alt="Poster Design"
           />
@@ -1018,7 +1030,7 @@
 
         <div class="masonry-item hover-trigger">
           <img
-            src="./Work/new-year-post.png"
+            src="./Work/christmas-post-2.png"
             loading="lazy"
             alt="Banner Design"
           />
@@ -1029,7 +1041,7 @@
         </div>
 
         <div class="masonry-item hover-trigger">
-          <img src="./Work/anniversary.jpg" loading="lazy" alt="Album Art" />
+          <img src="./Work/christmas-post.png" loading="lazy" alt="Album Art" />
           <div class="masonry-overlay">
             <span class="work-tag">Album Art</span>
             <h3 class="work-title">Vibe Check</h3>
@@ -1037,7 +1049,7 @@
         </div>
 
         <div class="masonry-item hover-trigger">
-          <img src="./Work/christmas-post-2.png" loading="lazy" alt="Flyer" />
+          <img src="./Work/diwali-post.jpg" loading="lazy" alt="Flyer" />
           <div class="masonry-overlay">
             <span class="work-tag">Flyer</span>
             <h3 class="work-title">Event Launch</h3>
@@ -1053,7 +1065,39 @@
         </div>
 
         <div class="masonry-item hover-trigger">
+          <img src="./Work/new-year-post.jpg" loading="lazy" alt="Thumbnail" />
+          <div class="masonry-overlay">
+            <span class="work-tag">Thumbnail</span>
+            <h3 class="work-title">Viral Video</h3>
+          </div>
+        </div>
+
+        <div class="masonry-item hover-trigger">
+          <img src="./Work/new-year-post.png" loading="lazy" alt="Thumbnail" />
+          <div class="masonry-overlay">
+            <span class="work-tag">Thumbnail</span>
+            <h3 class="work-title">Viral Video</h3>
+          </div>
+        </div>
+
+        <div class="masonry-item hover-trigger">
+          <img src="./Work/quot.jpg" loading="lazy" alt="Thumbnail" />
+          <div class="masonry-overlay">
+            <span class="work-tag">Thumbnail</span>
+            <h3 class="work-title">Viral Video</h3>
+          </div>
+        </div>
+
+        <div class="masonry-item hover-trigger">
           <img src="./Work/thumbnail.jpg" loading="lazy" alt="Thumbnail" />
+          <div class="masonry-overlay">
+            <span class="work-tag">Thumbnail</span>
+            <h3 class="work-title">Viral Video</h3>
+          </div>
+        </div>
+
+        <div class="masonry-item hover-trigger">
+          <img src="./Work/thumbnail2.jpg" loading="lazy" alt="Thumbnail" />
           <div class="masonry-overlay">
             <span class="work-tag">Thumbnail</span>
             <h3 class="work-title">Viral Video</h3>
@@ -1186,7 +1230,7 @@
         font-size: 0.8rem;
       "
     >
-      <p>&copy; 2025 Jay Sadhu. All rights reserved.</p>
+      <p>&copy; <span id="year">2026</span> Jay Sadhu. All rights reserved.</p>
     </footer>
 
     <script>
@@ -1231,6 +1275,8 @@
       document
         .querySelectorAll(".reveal")
         .forEach((el) => observer.observe(el));
+
+      document.getElementById("year").textContent = new Date().getFullYear();
     </script>
   </body>
 </html>
