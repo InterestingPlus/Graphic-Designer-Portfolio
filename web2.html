@@ -1,0 +1,573 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BUSS PERSON | VISUAL ARCHITECT</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Syncopate:wght@400;700&family=Manrope:wght@300;500;800&display=swap" rel="stylesheet">
+    <style>
+        /* ==================== 
+           0. ULTRA CORE SETTINGS 
+           ==================== */
+        :root {
+            --black: #050505;
+            --off-black: #111111;
+            --white: #e0e0e0;
+            --accent: #5e17eb; /* Deep Electric Purple */
+            --accent-glow: #a766ff;
+            --gray: #888;
+            --grain: url('data:image/svg+xml,%3Csvg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg"%3E%3Cfilter id="noiseFilter"%3E%3CfeTurbulence type="fractalNoise" baseFrequency="0.65" numOctaves="3" stitchTiles="stitch"/%3E%3C/filter%3E%3Crect width="100%25" height="100%25" filter="url(%23noiseFilter)" opacity="0.05"/%3E%3C/svg%3E');
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            cursor: none; /* Custom cursor only */
+        }
+
+        body {
+            background-color: var(--black);
+            color: var(--white);
+            font-family: 'Manrope', sans-serif;
+            overflow-x: hidden;
+            width: 100vw;
+        }
+
+        /* FILM GRAIN OVERLAY */
+        .noise-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 9999;
+            background-image: var(--grain);
+            opacity: 0.4;
+        }
+
+        /* CUSTOM CURSOR */
+        .cursor {
+            width: 20px;
+            height: 20px;
+            background: var(--white);
+            border-radius: 50%;
+            position: fixed;
+            pointer-events: none;
+            z-index: 10000;
+            mix-blend-mode: difference;
+            transition: transform 0.2s ease;
+        }
+        
+        a:hover ~ .cursor, .btn:hover ~ .cursor {
+            transform: scale(4);
+        }
+
+        /* TYPOGRAPHY SYSTEM */
+        h1, h2, h3 {
+            font-family: 'Syncopate', sans-serif;
+            text-transform: uppercase;
+            line-height: 1;
+        }
+
+        .outline-text {
+            color: transparent;
+            -webkit-text-stroke: 1px rgba(255,255,255,0.3);
+        }
+
+        /* ==================== 
+           1. LOADER 
+           ==================== */
+        .loader {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100vh;
+            background: var(--black);
+            z-index: 99999;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            animation: fadeOut 1s ease-in-out 3s forwards;
+        }
+        .loader-bar {
+            width: 0;
+            height: 2px;
+            background: var(--accent);
+            animation: load 3s ease-in-out forwards;
+        }
+        @keyframes load { 0% {width: 0;} 100% {width: 300px;} }
+        @keyframes fadeOut { 100% {opacity: 0; visibility: hidden;} }
+
+        /* ==================== 
+           2. HERO & BANNER LOGIC 
+           ==================== */
+        .hero-section {
+            height: 100vh;
+            width: 100%;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .hero-banner {
+            width: 100%;
+            height: 60vh;
+            background: linear-gradient(180deg, #1a0b2e 0%, #000000 100%);
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        /* Dynamic Grid Background in Banner */
+        .grid-lines {
+            position: absolute;
+            width: 100%; height: 100%;
+            background-image: linear-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+            background-size: 50px 50px;
+            perspective: 500px;
+            transform: rotateX(45deg) scale(1.5);
+            opacity: 0.5;
+        }
+
+        .overlap-wrapper {
+            position: relative;
+            width: 100%;
+            height: 40vh;
+            display: flex;
+            justify-content: center;
+        }
+
+        .main-logo-box {
+            width: 200px;
+            height: 200px;
+            background: #000;
+            border: 2px solid var(--accent);
+            border-radius: 50%;
+            position: absolute;
+            top: -100px; /* Half inside banner */
+            z-index: 10;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 0 50px rgba(94, 23, 235, 0.4);
+            overflow: hidden;
+        }
+
+        .main-logo-box img {
+            width: 100%; height: 100%; object-fit: cover;
+        }
+
+        .hero-title {
+            position: absolute;
+            top: 120px;
+            text-align: center;
+        }
+
+        .hero-title h1 {
+            font-size: 5vw;
+            letter-spacing: -2px;
+            margin-bottom: 10px;
+        }
+
+        .hero-title span {
+            color: var(--accent);
+        }
+
+        .hero-subtitle {
+            font-size: 1.2rem;
+            letter-spacing: 5px;
+            color: var(--gray);
+            text-transform: uppercase;
+        }
+
+        /* ==================== 
+           3. INFINITE MARQUEE 
+           ==================== */
+        .marquee-strip {
+            background: var(--accent);
+            padding: 20px 0;
+            white-space: nowrap;
+            overflow: hidden;
+            transform: rotate(-2deg) scale(1.05);
+            border-top: 2px solid #fff;
+            border-bottom: 2px solid #fff;
+            margin: 50px 0;
+            z-index: 5;
+            position: relative;
+        }
+
+        .marquee-content {
+            display: inline-block;
+            animation: marquee 20s linear infinite;
+            font-family: 'Syncopate', sans-serif;
+            font-weight: 700;
+            font-size: 2rem;
+            color: #fff;
+        }
+        
+        @keyframes marquee {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
+
+        /* ==================== 
+           4. STICKY CARD LAYOUT 
+           ==================== */
+        .content-container {
+            width: 90%;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding-bottom: 200px;
+        }
+
+        /* Section Styling */
+        .section-card {
+            position: sticky; /* The Magic Trick */
+            top: 100px;
+            min-height: 80vh;
+            background: var(--off-black);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 30px;
+            margin-bottom: 100px; /* Space between stickiness */
+            padding: 60px;
+            box-shadow: 0 -10px 40px rgba(0,0,0,0.5);
+            overflow: hidden;
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 60px;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            padding-bottom: 20px;
+        }
+
+        .card-number {
+            font-size: 4rem;
+            font-family: 'Syncopate';
+            color: rgba(255,255,255,0.05);
+        }
+
+        /* SERVICES GRID inside Card 1 */
+        .services-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .svc-item {
+            border: 1px solid rgba(255,255,255,0.1);
+            padding: 30px;
+            transition: 0.3s;
+        }
+
+        .svc-item:hover {
+            background: var(--accent);
+            border-color: var(--accent);
+            color: #fff;
+        }
+
+        .svc-item h3 {
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+        }
+
+        .svc-item p {
+            font-size: 0.9rem;
+            opacity: 0.7;
+            font-family: 'Manrope';
+        }
+
+        /* EXPERIENCE TIMELINE inside Card 2 */
+        .exp-row {
+            display: flex;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            padding: 40px 0;
+            transition: 0.3s;
+        }
+        
+        .exp-row:hover {
+            background: rgba(255,255,255,0.03);
+            padding-left: 20px;
+        }
+
+        .exp-year {
+            width: 20%;
+            font-weight: 800;
+            color: var(--accent-glow);
+            font-size: 1.2rem;
+        }
+        
+        .exp-detail {
+            width: 80%;
+        }
+
+        .exp-role {
+            font-size: 2rem;
+            font-family: 'Syncopate';
+            margin-bottom: 10px;
+        }
+
+        .exp-company {
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 10px;
+            display: block;
+            color: #888;
+        }
+
+        /* TESTIMONIALS / STATS inside Card 3 */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 50px;
+        }
+        .big-stat {
+            font-size: 6rem;
+            font-weight: 800;
+            line-height: 1;
+        }
+        .big-stat span {
+            color: var(--accent);
+            font-size: 2rem;
+            vertical-align: super;
+        }
+
+        /* ==================== 
+           5. FOOTER 
+           ==================== */
+        footer {
+            min-height: 80vh;
+            background: #000;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            position: relative;
+            z-index: 20;
+        }
+
+        .footer-cta {
+            font-size: 8vw;
+            line-height: 0.9;
+            font-family: 'Syncopate';
+            color: transparent;
+            -webkit-text-stroke: 2px #fff;
+            transition: 0.5s;
+            margin-bottom: 50px;
+        }
+
+        .footer-cta:hover {
+            color: var(--accent);
+            -webkit-text-stroke: 2px var(--accent);
+        }
+
+        .designer-credit {
+            position: absolute;
+            bottom: 30px;
+            font-size: 0.8rem;
+            color: #555;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        .designer-credit strong {
+            color: var(--white);
+        }
+
+        /* ==================== 
+           RESPONSIVE 
+           ==================== */
+        @media (max-width: 768px) {
+            .hero-title h1 { font-size: 10vw; }
+            .section-card { padding: 30px; min-height: auto; }
+            .card-number { font-size: 2rem; }
+            .exp-row { flex-direction: column; }
+            .exp-year { margin-bottom: 10px; }
+            .footer-cta { font-size: 15vw; }
+            .main-logo-box { width: 150px; height: 150px; top: -75px; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="loader">
+        <div class="loader-bar"></div>
+    </div>
+
+    <div class="noise-overlay"></div>
+    <div class="cursor" id="cursor"></div>
+
+    <section class="hero-section">
+        <div class="hero-banner">
+            <div class="grid-lines"></div>
+        </div>
+        
+        <div class="overlap-wrapper">
+            <div class="main-logo-box">
+                <img src="https://via.placeholder.com/200x200/111/fff?text=LOGO" alt="Logo">
+            </div>
+
+            <div class="hero-title">
+                <p class="hero-subtitle">Visual Designer & Editor</p>
+                <h1>BUSS <span>PERSON</span></h1>
+                <p style="max-width: 600px; margin: 0 auto; line-height: 1.6; color: #aaa;">
+                    Creating unbelievable digital experiences. I turn raw chaos into cinematic masterpieces.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <div class="marquee-strip">
+        <div class="marquee-content">
+            VIDEO EDITING /// PHOTO MANIPULATION /// BRAND IDENTITY /// YOUTUBE GROWTH /// THUMBNAIL DESIGN /// VIDEO EDITING /// PHOTO MANIPULATION /// BRAND IDENTITY /// YOUTUBE GROWTH /// THUMBNAIL DESIGN /// 
+        </div>
+    </div>
+
+    <div class="content-container">
+        
+        <div class="section-card" id="services">
+            <div class="card-header">
+                <h2>01 // Capabilities</h2>
+                <div class="card-number">01</div>
+            </div>
+            <div class="services-list">
+                <div class="svc-item">
+                    <h3>Video Editing</h3>
+                    <p>Cinematic storytelling, pacing, and sound design. I make videos that keep retention high.</p>
+                </div>
+                <div class="svc-item">
+                    <h3>Photo Editing</h3>
+                    <p>Photoshop wizardry. Retouching, compositing, and color grading for high-impact visuals.</p>
+                </div>
+                <div class="svc-item">
+                    <h3>YT Thumbnails</h3>
+                    <p>Designed for the click. High contrast, emotional triggers, and verified CTR strategies.</p>
+                </div>
+                <div class="svc-item">
+                    <h3>Logo Design</h3>
+                    <p>Modern, minimal, and memorable identifiers for your business or personal brand.</p>
+                </div>
+                <div class="svc-item">
+                    <h3>Canva Design</h3>
+                    <p>Rapid social media assets, stories, and carousels that maintain brand consistency.</p>
+                </div>
+                <div class="svc-item">
+                    <h3>Channel Growth</h3>
+                    <p>Strategic consulting to grow your subscribers and views in record time.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="section-card" id="experience">
+            <div class="card-header">
+                <h2>02 // Experience</h2>
+                <div class="card-number">02</div>
+            </div>
+            
+            <div class="experience-list">
+                <div class="exp-row">
+                    <div class="exp-year">CURRENT</div>
+                    <div class="exp-detail">
+                        <h3 class="exp-role">Growth Strategist</h3>
+                        <span class="exp-company">YouTube Growth Hacking</span>
+                        <p>Specializing in scaling channels from zero. Implementing rigorous metadata strategies and visual overhauls to boost organic reach.</p>
+                    </div>
+                </div>
+
+                <div class="exp-row">
+                    <div class="exp-year">2023 - 2024</div>
+                    <div class="exp-detail">
+                        <h3 class="exp-role">Creative Lead</h3>
+                        <span class="exp-company">Freelance / Remote</span>
+                        <p>Completed 20+ major projects. Delivered comprehensive editing packages and logo systems for international clients.</p>
+                    </div>
+                </div>
+
+                <div class="exp-row">
+                    <div class="exp-year">2021 - 2023</div>
+                    <div class="exp-detail">
+                        <h3 class="exp-role">Publisher & Editor</h3>
+                        <span class="exp-company">Guidans Company</span>
+                        <p>Managed student workflow systems. Responsible for all visual outputs including banners, publishing materials, and educational content thumbnails.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="section-card" id="impact">
+            <div class="card-header">
+                <h2>03 // The Numbers</h2>
+                <div class="card-number">03</div>
+            </div>
+            
+            <div class="stats-grid">
+                <div>
+                    <div class="big-stat">20<span>+</span></div>
+                    <p>PROJECTS SHIPPED</p>
+                </div>
+                <div>
+                    <div class="big-stat">300<span>%</span></div>
+                    <p>AVG. CHANNEL GROWTH</p>
+                </div>
+                <div>
+                    <div class="big-stat">50<span>+</span></div>
+                    <p>LOGOS CRAFTED</p>
+                </div>
+                <div>
+                    <div class="big-stat">∞</div>
+                    <p>CREATIVE POTENTIAL</p>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <footer>
+        <p style="color: #666; margin-bottom: 20px;">READY TO START?</p>
+        <div class="footer-cta">LET'S TALK</div>
+        
+        <div style="margin-top: 50px; display: flex; gap: 30px;">
+            <a href="#" style="color: white; text-decoration: none; border-bottom: 1px solid white;">INSTAGRAM</a>
+            <a href="#" style="color: white; text-decoration: none; border-bottom: 1px solid white;">EMAIL</a>
+            <a href="#" style="color: white; text-decoration: none; border-bottom: 1px solid white;">LINKEDIN</a>
+        </div>
+
+        <div class="designer-credit">
+            DESIGNED & DEVELOPED BY <strong>[YOUR NAME HERE]</strong> <br>
+            @COPY_RIGHT_2025_BUSS_PERSON
+        </div>
+    </footer>
+
+    <script>
+        // Custom Cursor Logic
+        const cursor = document.getElementById('cursor');
+        
+        document.addEventListener('mousemove', (e) => {
+            cursor.style.left = e.clientX + 'px';
+            cursor.style.top = e.clientY + 'px';
+        });
+
+        // Add hover effect to links to scale cursor
+        const links = document.querySelectorAll('a, .footer-cta, .svc-item, .exp-row');
+        links.forEach(link => {
+            link.addEventListener('mouseenter', () => {
+                cursor.style.transform = 'scale(4)';
+                cursor.style.background = 'transparent';
+                cursor.style.border = '1px solid white';
+            });
+            link.addEventListener('mouseleave', () => {
+                cursor.style.transform = 'scale(1)';
+                cursor.style.background = 'white';
+                cursor.style.border = 'none';
+            });
+        });
+    </script>
+</body>
+</html>

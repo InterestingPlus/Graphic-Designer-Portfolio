@@ -1,0 +1,748 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Buss Person | Creative Visionary</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=Space+Grotesk:wght@300;500;700&display=swap" rel="stylesheet">
+    <style>
+        /* ====================
+           1. CORE VARIABLES & RESET
+           ==================== */
+        :root {
+            --bg-deep: #050505;
+            --bg-secondary: #0a0a0a;
+            --accent-purple: #7b2cbf;
+            --accent-glow: #9d4edd;
+            --accent-light: #e0aaff;
+            --text-main: #ffffff;
+            --text-muted: #a0a0a0;
+            --glass: rgba(255, 255, 255, 0.05);
+            --glass-border: rgba(255, 255, 255, 0.1);
+            --font-main: 'Outfit', sans-serif;
+            --font-display: 'Space Grotesk', sans-serif;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            cursor: none; /* Hiding default cursor for custom one */
+        }
+
+        body {
+            background-color: var(--bg-deep);
+            color: var(--text-main);
+            font-family: var(--font-main);
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        /* Scrollbar Styling */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: var(--bg-deep);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: var(--accent-purple);
+            border-radius: 4px;
+        }
+
+        /* ====================
+           2. CUSTOM CURSOR
+           ==================== */
+        .cursor {
+            width: 20px;
+            height: 20px;
+            border: 1px solid var(--text-main);
+            border-radius: 50%;
+            position: fixed;
+            pointer-events: none;
+            z-index: 9999;
+            transition: transform 0.1s;
+            mix-blend-mode: difference;
+        }
+        .cursor-dot {
+            width: 6px;
+            height: 6px;
+            background: var(--accent-glow);
+            border-radius: 50%;
+            position: fixed;
+            pointer-events: none;
+            z-index: 9999;
+        }
+
+        /* ====================
+           3. LAYOUT UTILITIES
+           ==================== */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .section-padding {
+            padding: 120px 0;
+        }
+
+        h1, h2, h3 {
+            font-family: var(--font-display);
+            font-weight: 700;
+        }
+
+        .gradient-text {
+            background: linear-gradient(to right, #fff, var(--accent-light));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .btn {
+            padding: 15px 40px;
+            border: 1px solid var(--accent-purple);
+            background: transparent;
+            color: white;
+            font-family: var(--font-display);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            transition: 0.4s;
+            position: relative;
+            overflow: hidden;
+            display: inline-block;
+            margin-top: 20px;
+        }
+
+        .btn:hover {
+            background: var(--accent-purple);
+            box-shadow: 0 0 20px var(--accent-purple);
+            transform: translateY(-3px);
+        }
+
+        /* ====================
+           4. BACKGROUND FX
+           ==================== */
+        .bg-glow {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(123, 44, 191, 0.15) 0%, rgba(0,0,0,0) 70%);
+            filter: blur(80px);
+            z-index: -1;
+            animation: pulse 10s infinite alternate;
+        }
+
+        @keyframes pulse {
+            0% { opacity: 0.5; transform: translate(-50%, -50%) scale(1); }
+            100% { opacity: 0.8; transform: translate(-50%, -50%) scale(1.2); }
+        }
+
+        /* ====================
+           5. BANNER & PROFILE (HERO)
+           ==================== */
+        .hero-banner-wrapper {
+            position: relative;
+            width: 100%;
+            margin-bottom: 100px;
+        }
+
+        .big-banner {
+            width: 100%;
+            height: 450px;
+            background: linear-gradient(45deg, #240046, #3c096c);
+            background-size: 200% 200%;
+            animation: gradientBG 15s ease infinite;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Placeholder text for banner */
+        .banner-placeholder-text {
+            font-size: 8rem;
+            font-weight: 800;
+            color: rgba(255,255,255,0.03);
+            text-transform: uppercase;
+            letter-spacing: 20px;
+            pointer-events: none;
+        }
+
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* The Overlapping Logo Logic */
+        .profile-overlap-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            position: relative;
+            padding: 0 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .profile-logo-wrapper {
+            width: 200px;
+            height: 200px;
+            margin-top: -100px; /* Moves it up into the banner */
+            border-radius: 50%;
+            padding: 5px;
+            background: linear-gradient(to bottom, var(--accent-purple), var(--bg-deep));
+            z-index: 10;
+            position: relative;
+        }
+
+        .profile-logo {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            background: #111;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            font-weight: 800;
+            color: white;
+            border: 8px solid var(--bg-deep); /* Creates the 'cutout' effect */
+            overflow: hidden;
+        }
+
+        .brand-name {
+            text-align: center;
+            margin-top: 30px;
+        }
+
+        .brand-name h1 {
+            font-size: 4rem;
+            text-transform: uppercase;
+            letter-spacing: -2px;
+            line-height: 1;
+        }
+
+        .brand-name span {
+            color: var(--accent-glow);
+        }
+
+        .tagline {
+            font-size: 1.2rem;
+            color: var(--text-muted);
+            margin-top: 15px;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+        }
+
+        /* ====================
+           6. STATS COUNTER
+           ==================== */
+        .stats-strip {
+            display: flex;
+            justify-content: space-around;
+            border-top: 1px solid var(--glass-border);
+            border-bottom: 1px solid var(--glass-border);
+            padding: 40px 0;
+            background: rgba(255,255,255,0.02);
+            backdrop-filter: blur(10px);
+            margin-top: 50px;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 3rem;
+            font-weight: 700;
+            color: var(--accent-light);
+            font-family: var(--font-display);
+        }
+
+        .stat-label {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            text-transform: uppercase;
+        }
+
+        /* ====================
+           7. SERVICES GRID (Portfolio Items)
+           ==================== */
+        .section-header {
+            margin-bottom: 60px;
+        }
+        
+        .section-header h2 {
+            font-size: 3rem;
+            margin-bottom: 20px;
+        }
+
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+
+        .service-box {
+            background: var(--bg-secondary);
+            border: 1px solid var(--glass-border);
+            padding: 40px;
+            border-radius: 0;
+            transition: 0.4s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .service-box::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            background: var(--accent-purple);
+            transform: scaleY(0);
+            transition: transform 0.4s ease;
+            transform-origin: bottom;
+        }
+
+        .service-box:hover::before {
+            transform: scaleY(1);
+        }
+
+        .service-box:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 10px 40px -10px rgba(123, 44, 191, 0.3);
+            background: #121212;
+        }
+
+        .svc-icon {
+            font-size: 2.5rem;
+            margin-bottom: 25px;
+            display: inline-block;
+        }
+
+        .service-box h3 {
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+        }
+
+        .service-box p {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+        }
+
+        /* ====================
+           8. SKILLS BARS (Adding Depth)
+           ==================== */
+        .skills-container {
+            margin-top: 100px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 50px;
+        }
+
+        .skill-bar-wrapper {
+            margin-bottom: 25px;
+        }
+
+        .skill-info {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+
+        .progress-line {
+            width: 100%;
+            height: 6px;
+            background: #222;
+            position: relative;
+            border-radius: 10px;
+        }
+
+        .progress-line span {
+            display: block;
+            height: 100%;
+            background: var(--accent-glow);
+            position: absolute;
+            border-radius: 10px;
+            width: 0; /* JS will animate this */
+            transition: width 1.5s cubic-bezier(0.1, 0.7, 1.0, 0.1);
+        }
+
+        /* ====================
+           9. EXPERIENCE TIMELINE
+           ==================== */
+        .timeline-area {
+            position: relative;
+            border-left: 2px solid var(--glass-border);
+            margin-left: 20px;
+            padding-left: 40px;
+        }
+
+        .timeline-item {
+            margin-bottom: 60px;
+            position: relative;
+        }
+
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -51px;
+            top: 5px;
+            width: 20px;
+            height: 20px;
+            background: var(--bg-deep);
+            border: 2px solid var(--accent-purple);
+            border-radius: 50%;
+            box-shadow: 0 0 10px var(--accent-purple);
+        }
+
+        .time-date {
+            font-size: 0.9rem;
+            color: var(--accent-light);
+            font-weight: 600;
+            margin-bottom: 10px;
+            display: block;
+        }
+
+        .timeline-item h3 {
+            font-size: 2rem;
+            margin-bottom: 10px;
+            color: white;
+        }
+
+        .timeline-item h4 {
+            font-size: 1.2rem;
+            color: var(--text-muted);
+            margin-bottom: 20px;
+            font-weight: 400;
+        }
+
+        .timeline-desc {
+            background: var(--glass);
+            padding: 30px;
+            border-radius: 10px;
+            border: 1px solid var(--glass-border);
+        }
+
+        /* ====================
+           10. CONTACT AREA
+           ==================== */
+        .cta-section {
+            background: linear-gradient(to right, #0f0c29, #302b63, #24243e);
+            padding: 80px;
+            text-align: center;
+            border-radius: 30px;
+            margin-bottom: 50px;
+        }
+
+        /* ====================
+           11. FOOTER
+           ==================== */
+        footer {
+            border-top: 1px solid var(--glass-border);
+            padding: 80px 0 40px 0;
+            text-align: center;
+            background: #000;
+        }
+
+        .footer-logo {
+            font-size: 3rem;
+            font-weight: 800;
+            font-family: var(--font-display);
+            margin-bottom: 20px;
+            display: inline-block;
+        }
+
+        .cool-copy {
+            margin-top: 50px;
+            font-family: 'Courier New', monospace;
+            color: #555;
+            font-size: 0.8rem;
+            border-top: 1px solid #111;
+            padding-top: 20px;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .big-banner { height: 300px; }
+            .profile-logo-wrapper { width: 150px; height: 150px; margin-top: -75px; }
+            .brand-name h1 { font-size: 2.5rem; }
+            .stats-strip { flex-direction: column; gap: 30px; }
+            .skills-container { grid-template-columns: 1fr; }
+            .cta-section { padding: 40px 20px; }
+        }
+
+        /* Animation classes */
+        .reveal {
+            opacity: 0;
+            transform: translateY(50px);
+            transition: all 1s ease;
+        }
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="cursor"></div>
+    <div class="cursor-dot"></div>
+
+    <div class="bg-glow"></div>
+
+    <section class="hero-banner-wrapper">
+        <div class="big-banner">
+            <div class="banner-placeholder-text">CREATIVE SPACE</div>
+        </div>
+        
+        <div class="profile-overlap-container">
+            <div class="profile-logo-wrapper">
+                <div class="profile-logo">BP</div>
+            </div>
+            
+            <div class="brand-name">
+                <h1 class="reveal">Buss <span>Person</span></h1>
+                <p class="tagline reveal">The Ultimate Digital Architect</p>
+                <a href="#contact" class="btn reveal">Start a Project</a>
+            </div>
+        </div>
+    </section>
+
+    <div class="container reveal">
+        <div class="stats-strip">
+            <div class="stat-item">
+                <div class="stat-number" data-target="20">0+</div>
+                <div class="stat-label">Projects Completed</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number" data-target="300">0+</div>
+                <div class="stat-label">Thumbnails Designed</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number" data-target="100">0%</div>
+                <div class="stat-label">Client Satisfaction</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number" data-target="5">0+</div>
+                <div class="stat-label">Years Exp</div>
+            </div>
+        </div>
+    </div>
+
+    <section class="section-padding container">
+        <div class="section-header reveal">
+            <h2 class="gradient-text">What I Can Do For You</h2>
+            <p style="color:var(--text-muted); max-width: 600px;">
+                My portfolio is not just about design; it's about results. Scroll through the capabilities that I bring to the table.
+            </p>
+        </div>
+
+        <div class="services-grid">
+            <div class="service-box reveal">
+                <span class="svc-icon">🎥</span>
+                <h3>Video Editing</h3>
+                <p>Professional cuts, pacing, color grading, and sound design. Whether it's a vlog, a documentary, or a short, I make it cinematic.</p>
+            </div>
+            <div class="service-box reveal">
+                <span class="svc-icon">✨</span>
+                <h3>Photo Editing</h3>
+                <p>Advanced retouching using Photoshop. I manipulate reality to create visuals that are simply unbelievable.</p>
+            </div>
+            <div class="service-box reveal">
+                <span class="svc-icon">🖌️</span>
+                <h3>Logo Designer</h3>
+                <p>Your brand needs a face. I design logos that are half art, half business strategy. Memorable and iconic.</p>
+            </div>
+            <div class="service-box reveal">
+                <span class="svc-icon">🚀</span>
+                <h3>YT Growth & Banners</h3>
+                <p>I design channel art that converts visitors into subscribers. Banners, watermarks, and layout strategy.</p>
+            </div>
+            <div class="service-box reveal">
+                <span class="svc-icon">🖼️</span>
+                <h3>High-CTR Thumbnails</h3>
+                <p>The click is everything. I design thumbnails using psychology to maximize your Click-Through Rate.</p>
+            </div>
+            <div class="service-box reveal">
+                <span class="svc-icon">💻</span>
+                <h3>Canva Expert</h3>
+                <p>Quick, efficient, and beautiful designs for social media posts, stories, and presentations.</p>
+            </div>
+        </div>
+
+        <div class="skills-container reveal">
+            <div>
+                <h3 style="margin-bottom:30px;">Technical Proficiency</h3>
+                <div class="skill-bar-wrapper">
+                    <div class="skill-info"><span>Adobe Photoshop</span><span>95%</span></div>
+                    <div class="progress-line"><span style="width: 95%"></span></div>
+                </div>
+                <div class="skill-bar-wrapper">
+                    <div class="skill-info"><span>Adobe Premiere Pro</span><span>90%</span></div>
+                    <div class="progress-line"><span style="width: 90%"></span></div>
+                </div>
+                <div class="skill-bar-wrapper">
+                    <div class="skill-info"><span>Canva</span><span>100%</span></div>
+                    <div class="progress-line"><span style="width: 100%"></span></div>
+                </div>
+            </div>
+            <div>
+                <h3 style="margin-bottom:30px;">Creative Strategy</h3>
+                <div class="skill-bar-wrapper">
+                    <div class="skill-info"><span>Visual Storytelling</span><span>92%</span></div>
+                    <div class="progress-line"><span style="width: 92%"></span></div>
+                </div>
+                <div class="skill-bar-wrapper">
+                    <div class="skill-info"><span>Brand Identity</span><span>88%</span></div>
+                    <div class="progress-line"><span style="width: 88%"></span></div>
+                </div>
+                <div class="skill-bar-wrapper">
+                    <div class="skill-info"><span>YouTube Analytics</span><span>85%</span></div>
+                    <div class="progress-line"><span style="width: 85%"></span></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="section-padding" style="background: #080808;">
+        <div class="container">
+            <div class="section-header reveal">
+                <h2 class="gradient-text">My Professional Journey</h2>
+            </div>
+
+            <div class="timeline-area">
+                
+                <div class="timeline-item reveal">
+                    <span class="time-date">PRESENT</span>
+                    <h3>YouTube Growth Strategist</h3>
+                    <h4>Independent Consultant</h4>
+                    <div class="timeline-desc">
+                        <p>Specializing in rapid channel acceleration. I can take a dead channel and grow it in a few weeks through optimized metadata, high-retention editing, and viral thumbnail theory.</p>
+                    </div>
+                </div>
+
+                <div class="timeline-item reveal">
+                    <span class="time-date">2022 - 2024</span>
+                    <h3>Top Rated Freelancer</h3>
+                    <h4>Upwork / Fiverr / Direct Clients</h4>
+                    <div class="timeline-desc">
+                        <p>Completed 20+ major projects involving complex video editing and branding. Designed over 50 unique YT logos and delivered assets that helped clients secure sponsorships.</p>
+                    </div>
+                </div>
+
+                <div class="timeline-item reveal">
+                    <span class="time-date">2020 - 2022</span>
+                    <h3>Creative Lead & Publisher</h3>
+                    <h4>Guidans Company</h4>
+                    <div class="timeline-desc">
+                        <p>Focused on student workflow and timetable maintenance. I led the publishing division, creating all promotional banners, educational thumbnails, and managing the visual output of the company.</p>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <section class="container section-padding" id="contact">
+        <div class="cta-section reveal">
+            <h2>Ready to make something unbelievable?</h2>
+            <p style="margin: 20px 0; color: #ccc;">I am currently accepting new clients for Video Editing and Branding.</p>
+            <a href="mailto:your@email.com" class="btn">Get in Touch</a>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <div class="footer-logo">Buss Person</div>
+            <div>
+                <p style="color: #666; max-width: 500px; margin: 0 auto;">
+                    The website is strictly designed for high-end portfolio showcasing. 
+                    Video editing, Photo manipulation, and Brand Identity.
+                </p>
+            </div>
+            
+            <div class="cool-copy">
+                <p>CREATED BY <span style="color: #fff; font-weight: bold;">[YOUR NAME HERE]</span></p>
+                <p>&copy; 2025 ALL RIGHTS RESERVED | @COPY_SOMETHING_COOL_SECURE_CODE_v9.0</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // 1. Custom Cursor Logic
+        const cursor = document.querySelector('.cursor');
+        const cursorDot = document.querySelector('.cursor-dot');
+
+        document.addEventListener('mousemove', (e) => {
+            cursorDot.style.left = e.clientX + 'px';
+            cursorDot.style.top = e.clientY + 'px';
+            
+            // Add a slight delay for the circle to create a fluid effect
+            setTimeout(() => {
+                cursor.style.left = e.clientX + 'px';
+                cursor.style.top = e.clientY + 'px';
+            }, 50);
+        });
+
+        // 2. Scroll Reveal Animation
+        window.addEventListener('scroll', reveal);
+
+        function reveal() {
+            var reveals = document.querySelectorAll('.reveal');
+            for (var i = 0; i < reveals.length; i++) {
+                var windowHeight = window.innerHeight;
+                var elementTop = reveals[i].getBoundingClientRect().top;
+                var elementVisible = 150;
+
+                if (elementTop < windowHeight - elementVisible) {
+                    reveals[i].classList.add('active');
+                }
+            }
+        }
+        // Trigger once on load
+        reveal();
+
+        // 3. Number Counter Animation
+        const stats = document.querySelectorAll('.stat-number');
+        let hasAnimatedStats = false;
+
+        window.addEventListener('scroll', () => {
+            const statsSection = document.querySelector('.stats-strip');
+            const sectionPos = statsSection.getBoundingClientRect().top;
+            const screenPos = window.innerHeight;
+
+            if(sectionPos < screenPos && !hasAnimatedStats) {
+                stats.forEach(stat => {
+                    const target = +stat.getAttribute('data-target');
+                    const increment = target / 100;
+                    
+                    const updateCount = () => {
+                        const count = +stat.innerText.replace('+', '').replace('%', '');
+                        if(count < target) {
+                            stat.innerText = Math.ceil(count + increment) + (stat.getAttribute('data-target').includes('100') ? '%' : '+');
+                            setTimeout(updateCount, 20);
+                        } else {
+                            stat.innerText = target + (stat.getAttribute('data-target').includes('100') ? '%' : '+');
+                        }
+                    };
+                    updateCount();
+                });
+                hasAnimatedStats = true;
+            }
+        });
+    </script>
+</body>
+</html>

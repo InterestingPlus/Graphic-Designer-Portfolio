@@ -1,0 +1,707 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BUSS PERSON | Visual Architect</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Syncopate:wght@400;700&family=Space+Grotesk:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+    <style>
+        /* --------------------------------------------------
+           CORE VARIABLES & RESET
+        -------------------------------------------------- */
+        :root {
+            --bg-deep: #050505;
+            --bg-card: #0f0f0f;
+            --text-white: #ffffff;
+            --text-grey: #888888;
+            --accent-main: #9d4edd; /* Vivid Purple */
+            --accent-glow: #e0aaff;
+            --grid-line: rgba(255, 255, 255, 0.05);
+            --transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            cursor: none; /* Custom Cursor enabled */
+        }
+
+        body {
+            background-color: var(--bg-deep);
+            color: var(--text-white);
+            font-family: 'Space Grotesk', sans-serif;
+            overflow-x: hidden;
+            width: 100%;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        /* --------------------------------------------------
+           TEXTURE & ATMOSPHERE
+        -------------------------------------------------- */
+        .noise {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 999;
+            opacity: 0.05;
+            background: url('https://grainy-gradients.vercel.app/noise.svg');
+        }
+
+        .gradient-orb {
+            position: fixed;
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(157, 78, 221, 0.15) 0%, rgba(0,0,0,0) 70%);
+            border-radius: 50%;
+            filter: blur(80px);
+            z-index: -1;
+            pointer-events: none;
+            transition: transform 0.2s linear;
+        }
+
+        /* --------------------------------------------------
+           CUSTOM CURSOR
+        -------------------------------------------------- */
+        .cursor {
+            width: 20px;
+            height: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            border-radius: 50%;
+            position: fixed;
+            pointer-events: none;
+            z-index: 9999;
+            transition: transform 0.1s;
+            mix-blend-mode: difference;
+        }
+        
+        .cursor-inner {
+            width: 6px;
+            height: 6px;
+            background: var(--text-white);
+            border-radius: 50%;
+            position: fixed;
+            pointer-events: none;
+            z-index: 9999;
+        }
+
+        /* --------------------------------------------------
+           TYPOGRAPHY UTILITIES
+        -------------------------------------------------- */
+        .font-header {
+            font-family: 'Syncopate', sans-serif;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .highlight {
+            color: var(--accent-main);
+        }
+
+        /* --------------------------------------------------
+           NAVIGATION
+        -------------------------------------------------- */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            padding: 30px 50px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 100;
+            mix-blend-mode: difference;
+        }
+
+        .logo {
+            font-weight: 700;
+            font-size: 1.2rem;
+            letter-spacing: -1px;
+        }
+
+        .menu-btn {
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        /* --------------------------------------------------
+           1. HERO SECTION (Cinema Style)
+        -------------------------------------------------- */
+        .hero {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            position: relative;
+            padding: 0 20px;
+        }
+
+        .hero-title {
+            font-family: 'Syncopate', sans-serif;
+            font-size: clamp(3rem, 12vw, 10rem);
+            font-weight: 700;
+            line-height: 0.9;
+            text-transform: uppercase;
+            letter-spacing: -4px;
+            position: relative;
+            z-index: 2;
+            mix-blend-mode: color-dodge;
+        }
+
+        .hero-subtitle {
+            margin-top: 40px;
+            font-size: 1.1rem;
+            color: var(--text-grey);
+            text-transform: uppercase;
+            letter-spacing: 4px;
+            opacity: 0;
+            animation: fadeIn 1s 1s forwards;
+        }
+
+        /* The floating visual element */
+        .hero-visual {
+            position: absolute;
+            width: 40vw;
+            height: 40vw;
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 50%;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            animation: rotateVisual 20s linear infinite;
+        }
+
+        .hero-visual::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: -10px;
+            width: 20px;
+            height: 20px;
+            background: var(--accent-main);
+            border-radius: 50%;
+            box-shadow: 0 0 30px var(--accent-main);
+        }
+
+        @keyframes rotateVisual {
+            from { transform: translate(-50%, -50%) rotate(0deg); }
+            to { transform: translate(-50%, -50%) rotate(360deg); }
+        }
+
+        /* --------------------------------------------------
+           2. SCROLLING MARQUEE
+        -------------------------------------------------- */
+        .marquee {
+            width: 100%;
+            padding: 40px 0;
+            border-top: 1px solid var(--grid-line);
+            border-bottom: 1px solid var(--grid-line);
+            overflow: hidden;
+            background: #000;
+            position: relative;
+            z-index: 10;
+        }
+
+        .track {
+            display: flex;
+            white-space: nowrap;
+            animation: scroll 15s linear infinite;
+        }
+
+        .marquee h2 {
+            font-family: 'Syncopate', sans-serif;
+            font-size: 5rem;
+            margin-right: 80px;
+            color: transparent;
+            -webkit-text-stroke: 1px rgba(255,255,255,0.3);
+            text-transform: uppercase;
+            transition: 0.3s;
+        }
+        
+        .marquee:hover h2 {
+            color: var(--accent-main);
+            -webkit-text-stroke: 1px var(--accent-main);
+            opacity: 0.8;
+        }
+
+        @keyframes scroll {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
+
+        /* --------------------------------------------------
+           3. INTRO / IDENTITY (Sticky Scroll)
+        -------------------------------------------------- */
+        .intro-section {
+            padding: 200px 5vw;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+        }
+
+        .intro-sticky {
+            position: sticky;
+            top: 100px;
+            width: 40%;
+        }
+
+        .logo-mark {
+            font-size: 8rem;
+            font-family: 'Syncopate', sans-serif;
+            font-weight: 700;
+            background: linear-gradient(180deg, #fff, #333);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 20px;
+        }
+
+        .intro-content {
+            width: 50%;
+            font-size: 2rem;
+            line-height: 1.4;
+        }
+
+        .intro-content p {
+            margin-bottom: 50px;
+            color: var(--text-grey);
+            transition: color 0.3s;
+        }
+
+        .intro-content p:hover {
+            color: #fff;
+        }
+
+        /* --------------------------------------------------
+           4. BENTO GRID SERVICES (The "Modern" Look)
+        -------------------------------------------------- */
+        .services-section {
+            padding: 100px 5vw;
+        }
+
+        .section-header {
+            margin-bottom: 80px;
+            font-family: 'Syncopate', sans-serif;
+            font-size: 3rem;
+            border-bottom: 1px solid var(--grid-line);
+            padding-bottom: 20px;
+            display: inline-block;
+        }
+
+        .bento-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            grid-template-rows: repeat(2, 350px);
+            gap: 20px;
+        }
+
+        .bento-card {
+            background: var(--bg-card);
+            border: 1px solid var(--grid-line);
+            border-radius: 20px;
+            padding: 40px;
+            position: relative;
+            overflow: hidden;
+            transition: var(--transition);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .bento-card:hover {
+            border-color: var(--accent-main);
+            transform: translateY(-5px);
+            box-shadow: 0 20px 50px rgba(157, 78, 221, 0.1);
+        }
+
+        /* Specific Grid Placements */
+        .bento-large { grid-column: span 2; }
+        .bento-tall { grid-row: span 2; }
+
+        .bento-icon {
+            font-size: 3rem;
+            margin-bottom: 20px;
+        }
+
+        .bento-title {
+            font-size: 1.5rem;
+            font-weight: 500;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+        }
+
+        .bento-desc {
+            color: var(--text-grey);
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+
+        .card-number {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            font-family: 'Syncopate', sans-serif;
+            color: var(--grid-line);
+            font-size: 4rem;
+        }
+
+        /* --------------------------------------------------
+           5. PROCESS / TIMELINE
+        -------------------------------------------------- */
+        .process-section {
+            padding: 200px 5vw;
+            position: relative;
+        }
+
+        .timeline-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 80px 0;
+            border-bottom: 1px solid var(--grid-line);
+            transition: 0.3s;
+        }
+
+        .timeline-item:hover {
+            padding: 80px 20px;
+            background: rgba(255,255,255,0.02);
+        }
+
+        .time-year {
+            font-family: 'Syncopate', sans-serif;
+            font-size: 1.2rem;
+            color: var(--accent-main);
+        }
+
+        .time-role {
+            font-size: 3rem;
+            font-weight: 600;
+        }
+
+        .time-company {
+            font-size: 1.2rem;
+            color: var(--text-grey);
+            text-align: right;
+        }
+
+        /* --------------------------------------------------
+           6. CTA & FOOTER
+        -------------------------------------------------- */
+        .footer-cta {
+            height: 80vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background: linear-gradient(to top, #1a0b2e, #050505);
+            text-align: center;
+        }
+
+        .cta-text {
+            font-size: 5vw;
+            line-height: 1;
+            font-weight: 700;
+            margin-bottom: 50px;
+        }
+
+        .email-btn {
+            font-family: 'Syncopate', sans-serif;
+            font-size: 1.5rem;
+            padding: 20px 60px;
+            border: 1px solid rgba(255,255,255,0.3);
+            border-radius: 100px;
+            text-decoration: none;
+            color: #fff;
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .email-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 0%;
+            height: 100%;
+            background: #fff;
+            transition: 0.4s;
+            z-index: -1;
+        }
+
+        .email-btn:hover {
+            color: #000;
+            border-color: #fff;
+        }
+
+        .email-btn:hover::before {
+            width: 100%;
+        }
+
+        .footer-bottom {
+            padding: 40px;
+            border-top: 1px solid var(--grid-line);
+            display: flex;
+            justify-content: space-between;
+            color: var(--text-grey);
+            font-size: 0.8rem;
+            text-transform: uppercase;
+        }
+
+        /* --------------------------------------------------
+           MOBILE RESPONSIVENESS
+        -------------------------------------------------- */
+        @media (max-width: 1024px) {
+            .bento-grid {
+                grid-template-columns: 1fr;
+                grid-template-rows: auto;
+            }
+            .bento-large, .bento-tall { grid-column: auto; grid-row: auto; }
+            .intro-section { flex-direction: column; }
+            .intro-sticky, .intro-content { width: 100%; position: relative; top: 0; }
+            .intro-sticky { margin-bottom: 50px; }
+            .time-role { font-size: 1.5rem; }
+            .timeline-item { flex-direction: column; align-items: flex-start; gap: 10px; }
+            .time-company { text-align: left; }
+        }
+
+        /* --------------------------------------------------
+           ANIMATION CLASSES
+        -------------------------------------------------- */
+        .reveal {
+            opacity: 0;
+            transform: translateY(100px);
+            transition: all 1s ease;
+        }
+        
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        @keyframes fadeIn {
+            to { opacity: 1; }
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="noise"></div>
+    <div class="cursor" id="cursor"></div>
+    <div class="cursor-inner" id="cursor-inner"></div>
+    <div class="gradient-orb" id="orb"></div>
+
+    <nav>
+        <div class="logo font-header">BUSS PERSON</div>
+        <div class="menu-btn">Menu</div>
+    </nav>
+
+    <section class="hero">
+        <div class="hero-visual"></div>
+        <h1 class="hero-title">BUSS<br>PERSON</h1>
+        <p class="hero-subtitle">Creative Digital Designer & Visual Editor</p>
+    </section>
+
+    <div class="marquee">
+        <div class="track">
+            <h2>Video Editing &mdash;</h2>
+            <h2>Visual Identity &mdash;</h2>
+            <h2>Motion Graphics &mdash;</h2>
+            <h2>YouTube Growth &mdash;</h2>
+            <h2>Creative Direction &mdash;</h2>
+            <h2>Video Editing &mdash;</h2>
+            <h2>Visual Identity &mdash;</h2>
+            <h2>Motion Graphics &mdash;</h2>
+        </div>
+    </div>
+
+    <section class="intro-section">
+        <div class="intro-sticky reveal">
+            <div class="logo-mark">BP.</div>
+            <p style="text-transform: uppercase; letter-spacing: 2px;">Est. 2006</p>
+        </div>
+        <div class="intro-content">
+            <p class="reveal">I am Yash. A creative force born in the digital chaos.</p>
+            <p class="reveal">I don't just edit videos; I engineer attention. In a world of infinite scrolling, I create the pause.</p>
+            <p class="reveal">Specializing in high-retention YouTube content, premium brand identities, and visual storytelling that commands authority.</p>
+            <p class="reveal highlight">Based in India. Designing for the World.</p>
+        </div>
+    </section>
+
+    <section class="services-section">
+        <h2 class="section-header reveal">Capabilities</h2>
+        
+        <div class="bento-grid">
+            <div class="bento-card bento-large reveal">
+                <span class="card-number">01</span>
+                <div class="bento-icon">🎬</div>
+                <div>
+                    <h3 class="bento-title">Video Architecture</h3>
+                    <p class="bento-desc">Pacing, rhythm, and storytelling. I turn raw footage into cinematic experiences that retain viewers.</p>
+                </div>
+            </div>
+
+            <div class="bento-card reveal">
+                <span class="card-number">02</span>
+                <div class="bento-icon">👁️</div>
+                <div>
+                    <h3 class="bento-title">Thumbnail Design</h3>
+                    <p class="bento-desc">Psychologically optimized imagery to maximize Click-Through Rate (CTR).</p>
+                </div>
+            </div>
+
+            <div class="bento-card bento-tall reveal">
+                <span class="card-number">03</span>
+                <div class="bento-icon">🚀</div>
+                <div>
+                    <h3 class="bento-title">Growth Strategy</h3>
+                    <p class="bento-desc">Consulting on channel analytics, branding consistency, and content optimization to trigger algorithm growth.</p>
+                    <br>
+                    <p class="bento-desc" style="color:#fff;">Proven results within weeks.</p>
+                </div>
+            </div>
+
+            <div class="bento-card reveal">
+                <span class="card-number">04</span>
+                <div class="bento-icon">✒️</div>
+                <div>
+                    <h3 class="bento-title">Brand Logos</h3>
+                    <p class="bento-desc">Minimalist, futuristic, and adaptable identities.</p>
+                </div>
+            </div>
+
+            <div class="bento-card bento-large reveal">
+                <span class="card-number">05</span>
+                <div class="bento-icon">🎨</div>
+                <div>
+                    <h3 class="bento-title">Visual Manipulation</h3>
+                    <p class="bento-desc">Advanced Photoshop compositing. Making the impossible look real.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="process-section">
+        <h2 class="section-header reveal">The Timeline</h2>
+
+        <div class="timeline-item reveal">
+            <span class="time-year">2025</span>
+            <span class="time-role">BUSS PERSON</span>
+            <span class="time-company">Founder / Lead Creative</span>
+        </div>
+
+        <div class="timeline-item reveal">
+            <span class="time-year">2024</span>
+            <span class="time-role">Freelance Pro</span>
+            <span class="time-company">20+ Projects Completed</span>
+        </div>
+
+        <div class="timeline-item reveal">
+            <span class="time-year">2023</span>
+            <span class="time-role">Content Lead</span>
+            <span class="time-company">Guidans Company</span>
+        </div>
+    </section>
+
+    <section class="footer-cta">
+        <div class="cta-text reveal">
+            HAVE AN IDEA?<br>
+            <span class="highlight">LET'S BUILD IT.</span>
+        </div>
+        <a href="mailto:contact@bussperson.com" class="email-btn reveal">Start Project</a>
+    </section>
+
+    <div class="footer-bottom">
+        <span>© 2025 Buss Person</span>
+        <span>Yash / India</span>
+        <span>Scroll to Top</span>
+    </div>
+
+    <script>
+        // 1. MOUSE FOLLOWER
+        const cursor = document.getElementById('cursor');
+        const cursorInner = document.getElementById('cursor-inner');
+        const orb = document.getElementById('orb');
+
+        document.addEventListener('mousemove', (e) => {
+            const x = e.clientX;
+            const y = e.clientY;
+
+            // Direct follow for inner dot
+            cursorInner.style.transform = `translate3d(${x}px, ${y}px, 0)`;
+
+            // Slight delay for outer circle (magnetic feel)
+            setTimeout(() => {
+                cursor.style.transform = `translate3d(${x - 10}px, ${y - 10}px, 0)`;
+            }, 50);
+
+            // Background Orb moves slowly
+            orb.style.transform = `translate3d(${x - 300}px, ${y - 300}px, 0)`;
+        });
+
+        // 2. SCROLL REVEAL OBSERVER
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('active');
+                }
+            });
+        }, { threshold: 0.1 });
+
+        document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+        // 3. TEXT SCRAMBLE EFFECT ON LOAD
+        // A cool tech effect for the main title
+        const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+        const h1 = document.querySelector('.hero-title');
+        
+        let interval = null;
+        
+        h1.onmouseover = event => {  
+            let iteration = 0;
+            
+            clearInterval(interval);
+            
+            interval = setInterval(() => {
+                event.target.innerText = event.target.innerText
+                .split("")
+                .map((letter, index) => {
+                    if(index < iteration) {
+                        return event.target.dataset.value[index];
+                    }
+                    return letters[Math.floor(Math.random() * 26)]
+                })
+                .join("");
+                
+                if(iteration >= event.target.dataset.value.length){ 
+                    clearInterval(interval);
+                }
+                
+                iteration += 1 / 3;
+            }, 30);
+        }
+
+        // Store original text
+        h1.dataset.value = h1.innerText;
+
+        // Trigger once on load
+        setTimeout(() => {
+            h1.onmouseover({ target: h1 });
+        }, 1000);
+
+    </script>
+</body>
+</html>
